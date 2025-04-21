@@ -1,39 +1,77 @@
-import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
-import { useFonts } from 'expo-font';
-import { Stack } from 'expo-router';
-import * as SplashScreen from 'expo-splash-screen';
-import { StatusBar } from 'expo-status-bar';
-import { useEffect } from 'react';
-import 'react-native-reanimated';
+// import { AuthProvider } from "@/context/authContex";
+// import { Stack } from "expo-router";
+// import { GestureHandlerRootView } from "react-native-gesture-handler";
+// import { StyleSheet } from "react-native";
 
-import { useColorScheme } from '@/hooks/useColorScheme';
+// export default function RootLayout() {
+//   return (
+//     <GestureHandlerRootView style={styles.container}>
+//       <AuthProvider>
+//         <Stack>
+//           <Stack.Screen name="index" options={{ headerShown: false }} />
+//           <Stack.Screen name="(auth)/Login" options={{ title: "login", headerShown: false }} />
+//           <Stack.Screen name="(auth)/Register" options={{ title: "register", headerShown: false }} />
+//           <Stack.Screen name="(root)/[home]" options={{ title: "register", headerShown: false }} />
+//         </Stack>
+//       </AuthProvider>
+//     </GestureHandlerRootView>
+//   );
+// }
 
-// Prevent the splash screen from auto-hiding before asset loading is complete.
+// const styles = StyleSheet.create({
+//   container: {
+//     flex: 1,
+//   },
+// });
+
+
+import { useEffect, useCallback, useState } from "react";
+import { AuthProvider } from "@/context/authContex";
+import { Stack } from "expo-router";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
+import { StyleSheet } from "react-native";
+import * as SplashScreen from "expo-splash-screen";
+
+// Prevent splash from auto-hiding until we're ready
 SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
-  const colorScheme = useColorScheme();
-  const [loaded] = useFonts({
-    SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
-  });
+  const [appIsReady, setAppIsReady] = useState(false);
 
   useEffect(() => {
-    if (loaded) {
-      SplashScreen.hideAsync();
+    async function prepare() {
+      // Do any loading or async logic here
+      await new Promise(resolve => setTimeout(resolve, 1000)); // optional delay
+      setAppIsReady(true);
     }
-  }, [loaded]);
 
-  if (!loaded) {
-    return null;
-  }
+    prepare();
+  }, []);
+
+  const onLayoutRootView = useCallback(async () => {
+    if (appIsReady) {
+      await SplashScreen.hideAsync();
+    }
+  }, [appIsReady]);
+
+  if (!appIsReady) return null;
 
   return (
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <Stack>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="+not-found" />
-      </Stack>
-      <StatusBar style="auto" />
-    </ThemeProvider>
+    <GestureHandlerRootView style={styles.container} onLayout={onLayoutRootView}>
+      <AuthProvider>
+        <Stack>
+          <Stack.Screen name="index" options={{ headerShown: false }} />
+          <Stack.Screen name="(auth)/Login" options={{ headerShown: false }} />
+          <Stack.Screen name="(auth)/Register" options={{ headerShown: false }} />
+          <Stack.Screen name="(root)/[home]" options={{ headerShown: false }} />
+        </Stack>
+      </AuthProvider>
+    </GestureHandlerRootView>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+});
