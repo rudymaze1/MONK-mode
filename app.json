@@ -1,3 +1,4 @@
+
 {
   "expo": {
     "name": "MONK-mode",
@@ -15,12 +16,13 @@
         "ITSAppUsesNonExemptEncryption": false
       }
     },
-    "backgroundColor": "#444444",
+    "backgroundColor": "#ffffff",
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
-        "backgroundColor": "#444444"
-      }
+        "backgroundColor": "#ffffff"
+      },
+      "package": "com.rudymaze.MONKmode"
     },
     "web": {
       "bundler": "metro",
@@ -35,11 +37,18 @@
           "image": "./assets/images/monkmodedarksplash.png",
           "imageWidth": 200,
           "resizeMode": "contain",
-          "backgroundColor": "#444444"
+          "backgroundColor": "#ffffff"
         }
       ],
       "expo-font",
-      "expo-build-properties"
+      [
+        "expo-build-properties",
+        {
+          "ios": {
+            "useFrameworks": "static"
+          }
+        }
+      ]
     ],
     "experiments": {
       "typedRoutes": true
