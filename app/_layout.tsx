@@ -64,6 +64,7 @@ export default function RootLayout() {
           <Stack.Screen name="(auth)/Login" options={{ headerShown: false }} />
           <Stack.Screen name="(auth)/Register" options={{ headerShown: false }} />
           <Stack.Screen name="(root)/[home]" options={{ headerShown: false }} />
+          <Stack.Screen name="(root)/setting" options={{ headerShown: false }} />
         </Stack>
       </AuthProvider>
     </GestureHandlerRootView>
