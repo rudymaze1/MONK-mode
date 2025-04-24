@@ -266,6 +266,7 @@ const Main = () => {
         ))}
         <TouchableOpacity onPress={() => setIsModalVisible(true)}>
           <Text style={styles.addTaskText}>+ Add Task</Text>
+          
         </TouchableOpacity>
       </ScrollView>
 
