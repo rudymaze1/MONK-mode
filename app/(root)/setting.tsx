@@ -5,9 +5,16 @@ import { router } from 'expo-router';
 import { signOut } from 'firebase/auth';
 import { Firebase_AUTH } from '@/config/firebaseconfig';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useFonts } from 'expo-font'; // ✅ Import useFonts
+import { customFontsToLoad } from '@/constants/fonts'; // ✅ Import customFontsToLoad
 
 export default function SettingsScreen() {
+  const [fontsLoaded] = useFonts(customFontsToLoad); // ✅ Load fonts
   const [isNotificationsEnabled, setIsNotificationsEnabled] = React.useState(false);
+
+  if (!fontsLoaded) {
+    return null; // ✅ Don't render until fonts are loaded
+  }
 
   const handleLogout = async () => {
     try {
@@ -21,7 +28,6 @@ export default function SettingsScreen() {
 
   const settingsItems = [
     { icon: 'notifications-outline', label: 'Notification', type: 'switch' },
-    // { icon: 'sunny-outline', label: 'Dark Mode' },
     { icon: 'star-outline', label: 'Rate App' },
     { icon: 'share-social-outline', label: 'Share App' },
     { icon: 'lock-closed-outline', label: 'Privacy Policy' },
@@ -33,7 +39,9 @@ export default function SettingsScreen() {
 
   return (
     <View style={styles.container}>
+      <View style={{alignItems:'center'}}>
       <Text style={styles.header}>Settings</Text>
+      </View>
       <ScrollView contentContainerStyle={styles.list}>
         {settingsItems.map((item, index) => (
           <TouchableOpacity
@@ -78,10 +86,12 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
   },
   header: {
+    fontFamily: "poppins-bold",
     fontSize: 22,
     fontWeight: '600',
     marginBottom: 20,
     color: '#FFD700',
+    
   },
   list: {
     paddingBottom: 40,
@@ -100,17 +110,16 @@ const styles = StyleSheet.create({
     gap: 12,
   },
   itemText: {
+    fontFamily: 'poppins-light', // ✅ Custom font applied
     fontSize: 16,
     color: '#D9D9D9',
   },
   logoutItem: {
     marginTop: 30,
     paddingVertical: 15,
-    borderTopWidth: 1,
     borderTopColor: '#444',
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
   },
 });
-
