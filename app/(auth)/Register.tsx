@@ -247,7 +247,6 @@ const Registration = () => {
       });
 
       Alert.alert("Account created", "Welcome aboard!");
-      router.replace("/(drawer)");
     } catch (err) {
       console.error("Registration error:", err);
       setError("Something went wrong. Please try again.");
